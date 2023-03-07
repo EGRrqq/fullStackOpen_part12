@@ -46,9 +46,13 @@ singleRouter.get('/', async (req, res) => {
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  const updatedTodo = req.body
-  Todo.updateOne({id: req.todo.id}, updatedTodo)
-  res.send(201)
+  const updatedTodo = {
+    text: req.body.text,
+    done: req.body.done
+  }
+  
+  const todo = await Todo.findByIdAndUpdate(req.todo.id, updatedTodo, {new: true})
+  res.send(todo)
 });
 
 router.use('/:id', findByIdMiddleware, singleRouter)
